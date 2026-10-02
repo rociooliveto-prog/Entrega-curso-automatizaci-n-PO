@@ -1,0 +1,1555 @@
+{
+  "name": "Automatización de consulta clientes",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "maxTokensToSample": 1000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "36b6cb8e-6919-4653-92b6-54b4b43fee44",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "rfnpl1UJ2bW1T3j3",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {
+          "maxTokensToSample": 150
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -896,
+        128
+      ],
+      "id": "00a1f2ae-3a7c-4b61-bbe2-c1e0c42c3d43",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "rfnpl1UJ2bW1T3j3",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1312,
+        -96
+      ],
+      "id": "6f18059d-300d-4fe9-bf17-a6fa53127ad7",
+      "name": "Contacto Cliente via Whatsapp (trigger)",
+      "webhookId": "2641509f-c0a0-441c-81a5-c9e2926e4d5f",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "pmQOIIvPe3X7lkh1",
+          "name": "Tienda de productos de computación"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app585krMlPQggPrw",
+          "mode": "list",
+          "cachedResultName": "Entrega 8: Tienda de productos de computación ",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPIbwCDGu8ZvZpk",
+          "mode": "list",
+          "cachedResultName": "Consultas Clientes",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw/tblPIbwCDGu8ZvZpk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nombre de usuario de whatsapp": "={{ $('Contacto Cliente via Whatsapp (trigger)').item.json.contacts[0].profile.name }}",
+            "Numero de telefono": "={{ $('Contacto Cliente via Whatsapp (trigger)').item.json.contacts[0].wa_id }}",
+            "Fecha y hora del mensaje": "={{ $now }}",
+            "Mensaje": "={{ $('Contacto Cliente via Whatsapp (trigger)').item.json.messages[0].text.body }}",
+            "Estado": "Pendiente"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nombre de usuario de whatsapp",
+              "displayName": "Nombre de usuario de whatsapp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Numero de telefono",
+              "displayName": "Numero de telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Requiere revisión",
+                  "value": "Requiere revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha y hora del mensaje",
+              "displayName": "Fecha y hora del mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Nombre del modelo",
+              "displayName": "Nombre del modelo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1056,
+        -96
+      ],
+      "id": "fa5390d3-4205-4da3-a683-e96fe768f986",
+      "name": "Nuevo registro en \"Consulta Clientes\"",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "xTgRb8kOz6UgUpLL",
+          "name": "Airtable account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Consulta del cliente:\n{{ $('Nuevo registro en \"Consulta Clientes\"').item.json.fields.Mensaje }}\n\nInformación del producto:\n\nNombre: {{ $json.fields['Nombre del modelo'] }}\nPrecio: {{ $json.fields.Precio }}\nStock disponible: {{ $json.fields['cantidad en stock'] }}\nCaracterísticas: {{ $json.fields['caracteristicas del producto'] }}\nCódigo del producto: {{ $json.fields['Codigo del producto'] }}\n\nEn base a la consulta del cliente y la información del producto que hace mención generá una respuesta para enviar al cliente.",
+        "options": {
+          "systemMessage": "Sos un agente de atención al cliente de una tienda de productos de computación.\n\nTu tarea es responder consultas de clientes recibidas por WhatsApp utilizando la información del producto proporcionada en el User Message.\n\nReglas:\n- Respondé únicamente lo que el cliente consulta.\n- Utilizá exclusivamente los datos proporcionados en el User Message.\n- No inventes precios, stock, características, códigos ni productos.\n- Si el dato solicitado no está disponible, indicá amablemente que no contás con esa información.\n- No menciones Airtable, n8n, bases de datos, IA ni procesos internos.\n- Respondé de manera clara, cordial y profesional.\n- La respuesta debe estar lista para ser enviada directamente por WhatsApp.\n- La respuesta debe tener un máximo de 350 caracteres.\n- Devolvé únicamente el mensaje para el cliente, sin explicaciones adicionales.",
+          "maxIterations": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        48,
+        -208
+      ],
+      "id": "66b538ee-83d7-4645-8148-70a96d7894e2",
+      "name": "Posible respuesta al cliente",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Contacto Cliente via Whatsapp (trigger)').item.json.contacts[0].wa_id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        16
+      ],
+      "id": "20e6b8a6-77da-4fa3-ac66-d250e15864be",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Tu función encontrar de que producto de esta lista esta hablando el cliente que envió este mensaje {{ $('Contacto Cliente via Whatsapp (trigger)').item.json.messages[0].text.body }} pudiendo ser: \n\nLaptop Pro 15;\nSmartphone X10;\nAuriculares Inalámbricos Z;\nMonitor UltraWide 29\";\nTeclado Mecánico RGB;\nMouse Gamer Pro;\nTablet S8 Plus;\nImpresora Multifunción X;\nSmartwatch Fit 2;\nCámara Deportiva 4K;\nDisco Duro Externo 2TB;\nAltavoz Bluetooth Mini;\nRouter WiFi 6 AX;\nProyector LED HD;\nSSD Interno 1TB\n\nRespondé únicamente con el nombre exacto del producto tal como aparece en la lista. No agregues explicaciones ni texto adicional. Si no podés identificarlo, respondé únicamente: No identificado.\n",
+        "options": {
+          "maxIterations": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -800,
+        -96
+      ],
+      "id": "2ca0083d-438c-4cd8-9d2c-385869c9113a",
+      "name": "Extraer Nombre del Producto",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app585krMlPQggPrw",
+          "mode": "list",
+          "cachedResultName": "Entrega 8: Tienda de productos de computación ",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPIbwCDGu8ZvZpk",
+          "mode": "list",
+          "cachedResultName": "Consultas Clientes",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw/tblPIbwCDGu8ZvZpk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Estado": "Procesado por IA",
+            "id": "={{ $('Nuevo registro en \"Consulta Clientes\"').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Nombre de usuario de whatsapp",
+              "displayName": "Nombre de usuario de whatsapp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero de telefono",
+              "displayName": "Numero de telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Requiere revisión",
+                  "value": "Requiere revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha y hora del mensaje",
+              "displayName": "Fecha y hora del mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Nombre del modelo",
+              "displayName": "Nombre del modelo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        -288
+      ],
+      "id": "6916baec-6d2b-480a-8b63-ef28ea9561a1",
+      "name": "Procesado por IA",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "xTgRb8kOz6UgUpLL",
+          "name": "Airtable account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c6c997b2-e5a2-4ada-a594-f05952fd9443",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        960,
+        -288
+      ],
+      "id": "94a4d8a7-9dd3-40dd-a4b3-cab2427a4d4f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "rocio.oliveto@gmail.com",
+        "subject": "=Aprobar respuesta n8n - {{ $json.fields['Nombre del modelo'] }}",
+        "message": "=Necesitamos aprobación para la siguiente respuesta frente a una consulta del producto {{ $json.fields['Nombre del modelo'] }} : \n\n{{ $('Posible respuesta al cliente').item.json.output }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "APROBAR ",
+            "disapproveLabel": "RECHAZAR"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        -288
+      ],
+      "id": "7db3666a-4a00-4cbe-a106-480efc020d3f",
+      "name": "Human in the Loop",
+      "webhookId": "c873bba7-58bf-4536-b059-968eae9201c0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ST6FJaciOIkiZNoR",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "={{ $('Contacto Cliente via Whatsapp (trigger)').item.json.metadata.phone_number_id }}",
+        "recipientPhoneNumber": "541162783785",
+        "textBody": "={{ $('Posible respuesta al cliente').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1536,
+        -400
+      ],
+      "id": "2eab3eee-4c11-4706-b0f9-2e729de4ae23",
+      "name": "Send message",
+      "webhookId": "e4ce906f-610c-4b8e-9ebc-c72870dc1f9e",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "ADV0ZfsUtkH3jLmL",
+          "name": "WhatsApp account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app585krMlPQggPrw",
+          "mode": "list",
+          "cachedResultName": "Entrega 8: Tienda de productos de computación ",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPIbwCDGu8ZvZpk",
+          "mode": "list",
+          "cachedResultName": "Consultas Clientes",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw/tblPIbwCDGu8ZvZpk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Nuevo registro en \"Consulta Clientes\"').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Nombre de usuario de whatsapp",
+              "displayName": "Nombre de usuario de whatsapp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero de telefono",
+              "displayName": "Numero de telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Requiere revisión",
+                  "value": "Requiere revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha y hora del mensaje",
+              "displayName": "Fecha y hora del mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Nombre del modelo",
+              "displayName": "Nombre del modelo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "63a53f69-069b-484b-8f3a-b6951b79b38e",
+      "name": "Error: Requiere Revisión",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "xTgRb8kOz6UgUpLL",
+          "name": "Airtable account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app585krMlPQggPrw",
+          "mode": "list",
+          "cachedResultName": "Entrega 8: Tienda de productos de computación ",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPIbwCDGu8ZvZpk",
+          "mode": "list",
+          "cachedResultName": "Consultas Clientes",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw/tblPIbwCDGu8ZvZpk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Nuevo registro en \"Consulta Clientes\"').item.json.id }}",
+            "Estado": "Requiere revisión"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Nombre de usuario de whatsapp",
+              "displayName": "Nombre de usuario de whatsapp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero de telefono",
+              "displayName": "Numero de telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Requiere revisión",
+                  "value": "Requiere revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha y hora del mensaje",
+              "displayName": "Fecha y hora del mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Nombre del modelo",
+              "displayName": "Nombre del modelo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1232,
+        -144
+      ],
+      "id": "4f06c5d9-1143-4666-aa40-8a9622e9840d",
+      "name": "Requiere Revisión",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "xTgRb8kOz6UgUpLL",
+          "name": "Airtable account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app585krMlPQggPrw",
+          "mode": "list",
+          "cachedResultName": "Entrega 8: Tienda de productos de computación ",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPIbwCDGu8ZvZpk",
+          "mode": "list",
+          "cachedResultName": "Consultas Clientes",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw/tblPIbwCDGu8ZvZpk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Nuevo registro en \"Consulta Clientes\"').item.json.id }}",
+            "Estado": "Aprobado por Humano"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Nombre de usuario de whatsapp",
+              "displayName": "Nombre de usuario de whatsapp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero de telefono",
+              "displayName": "Numero de telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Requiere revisión",
+                  "value": "Requiere revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha y hora del mensaje",
+              "displayName": "Fecha y hora del mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Nombre del modelo",
+              "displayName": "Nombre del modelo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        -400
+      ],
+      "id": "b44800b5-2a30-4172-be95-849d9e6f0134",
+      "name": "Aprobado por Humano",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "xTgRb8kOz6UgUpLL",
+          "name": "Airtable account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app585krMlPQggPrw",
+          "mode": "list",
+          "cachedResultName": "Entrega 8: Tienda de productos de computación",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPIbwCDGu8ZvZpk",
+          "mode": "list",
+          "cachedResultName": "Consultas Clientes",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw/tblPIbwCDGu8ZvZpk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Error Agent IA": "SI",
+            "id": "={{ $('Nuevo registro en \"Consulta Clientes\"').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Nombre de usuario de whatsapp",
+              "displayName": "Nombre de usuario de whatsapp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero de telefono",
+              "displayName": "Numero de telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha y hora del mensaje",
+              "displayName": "Fecha y hora del mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Nombre del modelo",
+              "displayName": "Nombre del modelo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Requiere revisión",
+                  "value": "Requiere revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Error Agent IA",
+              "displayName": "Error Agent IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "SI",
+                  "value": "SI"
+                },
+                {
+                  "name": "NO ",
+                  "value": "NO "
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tiempo de ejecución",
+              "displayName": "Tiempo de ejecución",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ROI (Tiempo ahorrado)",
+              "displayName": "ROI (Tiempo ahorrado)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Aprobación HITL KPI2",
+              "displayName": "Aprobación HITL KPI2",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Error IA KPI3",
+              "displayName": "Error IA KPI3",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -416,
+        112
+      ],
+      "id": "bc7480aa-0d28-4c5c-8974-532c1ca9e20e",
+      "name": "Error Agent IA",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "xTgRb8kOz6UgUpLL",
+          "name": "Airtable account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app585krMlPQggPrw",
+          "mode": "list",
+          "cachedResultName": "Entrega 8: Tienda de productos de computación ",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPIbwCDGu8ZvZpk",
+          "mode": "list",
+          "cachedResultName": "Consultas Clientes",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw/tblPIbwCDGu8ZvZpk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nombre del modelo": "={{ $json.output }}",
+            "id": "={{ $('Nuevo registro en \"Consulta Clientes\"').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Nombre de usuario de whatsapp",
+              "displayName": "Nombre de usuario de whatsapp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero de telefono",
+              "displayName": "Numero de telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha y hora del mensaje",
+              "displayName": "Fecha y hora del mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Nombre del modelo",
+              "displayName": "Nombre del modelo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Requiere revisión",
+                  "value": "Requiere revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Error Agent IA",
+              "displayName": "Error Agent IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "SI",
+                  "value": "SI"
+                },
+                {
+                  "name": "NO ",
+                  "value": "NO "
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tiempo de ejecución",
+              "displayName": "Tiempo de ejecución",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ROI (Tiempo ahorrado)",
+              "displayName": "ROI (Tiempo ahorrado)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Aprobación HITL KPI2",
+              "displayName": "Aprobación HITL KPI2",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Error IA KPI3",
+              "displayName": "Error IA KPI3",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -416,
+        -208
+      ],
+      "id": "e12e76e1-02ef-4ec0-ac9d-dcb83e8c1765",
+      "name": "Actualiza info sobre producto",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "xTgRb8kOz6UgUpLL",
+          "name": "Airtable account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app585krMlPQggPrw",
+          "mode": "list",
+          "cachedResultName": "Entrega 8: Tienda de productos de computación",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblMwIcEmw4CSdePq",
+          "mode": "list",
+          "cachedResultName": "Información de Productos",
+          "cachedResultUrl": "https://airtable.com/app585krMlPQggPrw/tblMwIcEmw4CSdePq"
+        },
+        "filterByFormula": "={Nombre del modelo} = '{{ $json.fields[\"Nombre del modelo\"] }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        -208
+      ],
+      "id": "022c8204-8ba9-432d-87f4-f9d1caffac32",
+      "name": "Buscar información del producto",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "xTgRb8kOz6UgUpLL",
+          "name": "Airtable account 4"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Posible respuesta al cliente",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extraer Nombre del Producto",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contacto Cliente via Whatsapp (trigger)": {
+      "main": [
+        [
+          {
+            "node": "Nuevo registro en \"Consulta Clientes\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nuevo registro en \"Consulta Clientes\"": {
+      "main": [
+        [
+          {
+            "node": "Extraer Nombre del Producto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Posible respuesta al cliente",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Nombre del Producto": {
+      "main": [
+        [
+          {
+            "node": "Actualiza info sobre producto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Agent IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Posible respuesta al cliente": {
+      "main": [
+        [
+          {
+            "node": "Procesado por IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error: Requiere Revisión",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procesado por IA": {
+      "main": [
+        [
+          {
+            "node": "Human in the Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Human in the Loop": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Aprobado por Humano",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Requiere Revisión",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aprobado por Humano": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualiza info sobre producto": {
+      "main": [
+        [
+          {
+            "node": "Buscar información del producto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar información del producto": {
+      "main": [
+        [
+          {
+            "node": "Posible respuesta al cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f9a8844f-c1d1-4f5a-b5c3-da36d9202141",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4dd6c3567362ac42ebe7843f457088b4c1c6bbeacaa583ba6d23dfc2345ba8a2"
+  },
+  "nodeGroups": [],
+  "id": "fMT4NESDRfSg0tM4",
+  "tags": []
+}
